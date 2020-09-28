@@ -1,3 +1,4 @@
+import 'package:bloc_architecture/api/api_service.dart';
 import 'package:bloc_architecture/util/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_stetho/flutter_stetho.dart';
@@ -22,6 +23,8 @@ final logger = getIt<Logger>();
 
 final dio = getIt<Dio>();
 
+final apiService = getIt<APIService>();
+
 
 @InjectableInit(
   initializerName: r'$initGetIt', // default
@@ -42,5 +45,6 @@ Future<void> initApp(String environment) async {
     // Stetho.initialize();
     // enable log output to console
     logger.isDebug = true;
+    dio.interceptors.add(LogInterceptor(responseBody: true));
   }
 }
