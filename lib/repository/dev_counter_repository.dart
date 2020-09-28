@@ -1,7 +1,7 @@
 import 'package:bloc_architecture/repository/i_counter_repository.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@Injectable(as: ICounterRepository, env: [Environment.dev])
 class DevCounterRepository implements ICounterRepository {
 
   @override

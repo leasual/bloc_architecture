@@ -1,5 +1,9 @@
+import 'package:bloc_architecture/util/logger.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_stetho/flutter_stetho.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'injection.config.dart';
 
@@ -12,10 +16,31 @@ import 'injection.config.dart';
 
 final getIt = GetIt.instance;
 
+final sharePreferences = getIt<SharedPreferences>();
+
+final logger = getIt<Logger>();
+
+final dio = getIt<Dio>();
+
+
 @InjectableInit(
   initializerName: r'$initGetIt', // default
   preferRelativeImports: true, // default
   asExtension: false, // default
 )
-void configureDependencies(String environment) =>
+Future<GetIt> _configureDependencies(String environment) =>
     $initGetIt(getIt, environment: environment);
+
+Future<void> initApp(String environment) async {
+  //init dependence
+  await _configureDependencies(environment);
+
+  //init router
+
+  // init network request debug
+  if(Environment.dev == environment) {
+    // Stetho.initialize();
+    // enable log output to console
+    logger.isDebug = true;
+  }
+}

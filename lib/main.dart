@@ -1,9 +1,13 @@
+import 'package:bloc_architecture/di/injection.dart';
 import 'package:bloc_architecture/ui/counter/counter_bloc.dart';
-import 'package:bloc_architecture/ui/counter/couter_page.dart';
+import 'package:bloc_architecture/ui/counter/counter_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initApp(Environment.dev);
   runApp(MyApp());
 }
 
@@ -18,7 +22,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-          create: (context) => CounterBloc(), child: CounterPage()),
+          create: (context) => getIt<CounterBloc>(), child: CounterPage()),
     );
   }
 }
