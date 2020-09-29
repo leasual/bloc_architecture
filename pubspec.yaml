@@ -14,8 +14,6 @@ dependencies:
   get_it: ^4.0.1
   # http
   dio: 3.0.10 #latest version
-  # json annotation
-  json_annotation: ^3.1.0
   # functional programing
   dartz: ^0.9.1
   # bloc
@@ -23,14 +21,16 @@ dependencies:
   flutter_bloc: ^6.0.5
   # share preferences
   shared_preferences: ^0.5.12
-  # another code generator for unions/pattern-matching/copy
-  freezed: ^0.12.1
   # network request debug
   flutter_stetho: ^0.5.2
   # svg
   flutter_svg: ^0.19.0
   # image from network cache
   cached_network_image: ^2.3.2+1
+  # json annotation
+  json_annotation: ^3.1.0
+  # another code generator for unions/pattern-matching/copy,auto create like union class
+  freezed_annotation: ^0.12.0
   # multi screen support
   #responsive_builder:
 
@@ -44,22 +44,24 @@ dev_dependencies:
     sdk: flutter
   # json parse
   json_serializable: ^3.5.0
+  # another code generator for unions/pattern-matching/copy,
+  #you will not declare properties but instead factory constructors
+  freezed: ^0.12.1
   # add the generator to your dev_dependencies
   injectable_generator: ^1.0.4
   # of course build_runner is needed to run the generator
   build_runner:
   # unit test
   mockito: ^4.1.1
-  # another code generator for unions/pattern-matching/copy
-  freezed_annotation: ^0.12.0
+  # sealed class
+  meta: ^1.1.8
 
 flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

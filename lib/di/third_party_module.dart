@@ -20,7 +20,7 @@ abstract class ThirdPartyModule {
   // You can register named preemptive types like follows
   @Named("BaseUrl")
   @Injectable(env: [Environment.dev])
-  String get devBaseUrl => 'https://gank12.io/api/v2/data/category/';
+  String get devBaseUrl => 'https://gank.io/api/v2/data/category/';
 
   @Named("BaseUrl")
   @Injectable(env: [Environment.prod])
