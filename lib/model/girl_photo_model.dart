@@ -5,23 +5,15 @@ part 'girl_photo_model.g.dart';
 @JsonSerializable()
 class GirlPhotoListModel extends Object {
 
+  // @JsonKey(name: 'data')
   final List<GirlPhotoModel> girlPhotoList;
 
 
   GirlPhotoListModel(this.girlPhotoList);
 
-  // 对于对象列表1形式，
-  // https://juejin.im/post/6844903648254754823
-  // 参考https://github.com/PoojaB26/ParsingJSON-Flutter/blob/master/lib/model/photo_model.dart
-  // 对于对象列表2形式
-  //参考 https://github.com/liwangyong/flutter_json_annotation_use/blob/4cdd7f0517/app/lib/model/base.dart
-  factory GirlPhotoListModel.fromJson(List<dynamic> json) {
+  factory GirlPhotoListModel.fromJson(Map<String, dynamic> json) =>
+  _$GirlPhotoListModelFromJson(json);
 
-    List<GirlPhotoModel> girlPhotoList = new List<GirlPhotoModel>();
-    girlPhotoList = json.map((i)=>GirlPhotoModel.fromJson(i)).toList();
-
-    return new GirlPhotoListModel(girlPhotoList);
-  }
 
   Map<String, dynamic> toJson() => _$GirlPhotoListModelToJson(this);
 }

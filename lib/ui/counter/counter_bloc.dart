@@ -30,13 +30,16 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       String jsonString = await rootBundle.loadString("assets/json/girls.json");
       final jsonResult = json.decode(jsonString);
 
+      //注意(j) => GirlPhotoListModel.fromJson(jsonResult)一定要加上前段(j) =>不然报错
+      //因为这里要穿入的是一个方法，但是GirlPhotoListModel.fromJson不是一个方法
+      //https://github.com/google/json_serializable.dart/issues/723
       final data = BaseResponse<GirlPhotoListModel>.fromJson(
-          jsonResult, GirlPhotoListModel.fromJson(jsonResult['data']));
+          jsonResult, (j) => null);
       logger.d(tag, "data= $data");
-      // var result = await _counterRepository.getGirlPhotos();
-      // result.fold(
-      //     (l) => logger.d(tag, "$l"), (r) => logger.d(tag, "message= $r"));
-      // logger.d(tag, "bloc get data");
+      var result = await _counterRepository.getGirlPhotos(1);
+      result.fold(
+          (l) => logger.d(tag, "left= $l"), (r) => logger.d(tag, "right= $r"));
+      logger.d(tag, "bloc get data");
       // yield CounterIncrementState(1);
     }
   }

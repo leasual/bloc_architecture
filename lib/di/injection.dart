@@ -1,4 +1,4 @@
-import 'package:bloc_architecture/api/api_service.dart';
+import 'package:bloc_architecture/core/dio_helper.dart';
 import 'package:bloc_architecture/util/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_stetho/flutter_stetho.dart';
@@ -23,7 +23,7 @@ final logger = getIt<Logger>();
 
 final dio = getIt<Dio>();
 
-final apiService = getIt<APIService>();
+final dioHelper = getIt<DioHelper>();
 
 
 @InjectableInit(

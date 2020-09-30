@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api/api_service.dart';
+import '../core/dio_helper.dart';
 import '../ui/counter/counter_bloc.dart';
 import '../repository/dev_counter_repository.dart';
 import '../repository/i_counter_repository.dart';
@@ -45,7 +45,7 @@ Future<GetIt> $initGetIt(
       () => thirdPartyModule.dio(get<String>(instanceName: 'BaseUrl')));
 
   // Eager singletons must be registered in the right order
-  gh.singleton<APIService>(APIService());
+  gh.singleton<DioHelper>(DioHelper());
   final sharedPreferences = await thirdPartyModule.prefs;
   gh.singleton<SharedPreferences>(sharedPreferences);
   return get;
