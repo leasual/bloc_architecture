@@ -8,7 +8,7 @@ part of 'girl_photo_model.dart';
 
 GirlPhotoListModel _$GirlPhotoListModelFromJson(Map<String, dynamic> json) {
   return GirlPhotoListModel(
-    (json['data'] as List)
+    (json['girlPhotoList'] as List)
         ?.map((e) => e == null
             ? null
             : GirlPhotoModel.fromJson(e as Map<String, dynamic>))
@@ -18,7 +18,7 @@ GirlPhotoListModel _$GirlPhotoListModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$GirlPhotoListModelToJson(GirlPhotoListModel instance) =>
     <String, dynamic>{
-      'data': instance.girlPhotoList,
+      'girlPhotoList': instance.girlPhotoList,
     };
 
 GirlPhotoModel _$GirlPhotoModelFromJson(Map<String, dynamic> json) {

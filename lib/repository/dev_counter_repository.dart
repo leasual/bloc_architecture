@@ -8,11 +8,11 @@ import 'package:injectable/injectable.dart';
 
 @Injectable(as: ICounterRepository, env: [Environment.dev])
 class DevCounterRepository implements ICounterRepository {
+
   @override
   Future<Either<NetworkExceptions, GirlPhotoListModel>> getGirlPhotos(int page,
-      {int count = 10}) async {
-    return dioHelper
-        .get("Girl/type/Girl/page/1/count/10")
+      int count) async {
+    return apiService.getGirlPhotos(page)
         .map((a) => a.fold((l) {
               return left<NetworkExceptions, GirlPhotoListModel>(l);
             }, (r) {

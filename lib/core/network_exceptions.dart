@@ -1,73 +1,40 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meta/meta.dart';
 
-part 'network_exceptions.freezed.dart';
+@sealed
+abstract class NetworkExceptions {
 
-@freezed
-abstract class NetworkExceptions with _$NetworkExceptions {
+  String message;
+  int code;
 
-  const factory NetworkExceptions.requestCancelled() = RequestCancelled;
-
-  const factory NetworkExceptions.unauthorizedRequest() = UnauthorizedRequest;
-
-  const factory NetworkExceptions.badRequest() = BadRequest;
-
-  const factory NetworkExceptions.notFound(String reason) = NotFound;
-
-  const factory NetworkExceptions.methodNotAllowed() = MethodNotAllowed;
-
-  const factory NetworkExceptions.notAcceptable() = NotAcceptable;
-
-  const factory NetworkExceptions.requestTimeout() = RequestTimeout;
-
-  const factory NetworkExceptions.sendTimeout() = SendTimeout;
-
-  const factory NetworkExceptions.conflict() = Conflict;
-
-  const factory NetworkExceptions.internalServerError() = InternalServerError;
-
-  const factory NetworkExceptions.notImplemented() = NotImplemented;
-
-  const factory NetworkExceptions.serviceUnavailable() = ServiceUnavailable;
-
-  const factory NetworkExceptions.noInternetConnection() = NoInternetConnection;
-
-  const factory NetworkExceptions.formatException() = FormatException;
-
-  const factory NetworkExceptions.unableToProcess() = UnableToProcess;
-
-  const factory NetworkExceptions.defaultError(String error) = DefaultError;
-
-  const factory NetworkExceptions.unexpectedError() = UnexpectedError;
+  NetworkExceptions({this.message, this.code});
 
   static NetworkExceptions handleResponse(int statusCode) {
     switch (statusCode) {
       case 400:
       case 401:
       case 403:
-        return NetworkExceptions.unauthorizedRequest();
+        return UnauthorizedRequest();
         break;
       case 404:
-        return NetworkExceptions.notFound("Not found");
+        return NotFound();
         break;
       case 409:
-        return NetworkExceptions.conflict();
+        return Conflict();
         break;
       case 408:
-        return NetworkExceptions.requestTimeout();
+        return RequestTimeout();
         break;
       case 500:
-        return NetworkExceptions.internalServerError();
+        return InternalServerError();
         break;
       case 503:
-        return NetworkExceptions.serviceUnavailable();
+        return ServiceUnavailable();
         break;
       default:
         var responseCode = statusCode;
-        return NetworkExceptions.defaultError(
-          "Received invalid status code: $responseCode",
-        );
+        return DefaultError("default error", responseCode);
     }
   }
   static NetworkExceptions getDioException(error) {
@@ -77,43 +44,58 @@ abstract class NetworkExceptions with _$NetworkExceptions {
         if (error is DioError) {
           switch (error.type) {
             case DioErrorType.CANCEL:
-              networkExceptions = NetworkExceptions.requestCancelled();
+              networkExceptions = DefaultError("Cancel", -100);
               break;
             case DioErrorType.CONNECT_TIMEOUT:
-              networkExceptions = NetworkExceptions.requestTimeout();
+              networkExceptions = RequestTimeout();
               break;
             case DioErrorType.DEFAULT:
-              networkExceptions = NetworkExceptions.noInternetConnection();
+              networkExceptions = NoInternetConnection();
               break;
             case DioErrorType.RECEIVE_TIMEOUT:
-              networkExceptions = NetworkExceptions.sendTimeout();
+              networkExceptions = DefaultError("ReceiveTimeout", -100);
               break;
             case DioErrorType.RESPONSE:
               networkExceptions =
                   NetworkExceptions.handleResponse(error.response.statusCode);
               break;
             case DioErrorType.SEND_TIMEOUT:
-              networkExceptions = NetworkExceptions.sendTimeout();
+              networkExceptions = DefaultError("SendTimeout", -100);
               break;
           }
         } else if (error is SocketException) {
-          networkExceptions = NetworkExceptions.noInternetConnection();
+          networkExceptions = NoInternetConnection();
         } else {
-          networkExceptions = NetworkExceptions.unexpectedError();
+          networkExceptions = DefaultError("UnExpected", -100);
         }
         return networkExceptions;
       } on FormatException catch (e) {
         // Helper.printError(e.toString());
-        return NetworkExceptions.formatException();
+        return FormatException();
       } catch (_) {
-        return NetworkExceptions.unexpectedError();
+        return DefaultError("UnExpected", -100);
       }
     } else {
       if (error.toString().contains("is not a subtype of")) {
-        return NetworkExceptions.unableToProcess();
+        return DefaultError("UnExpected", -100);
       } else {
-        return NetworkExceptions.unexpectedError();
+        return DefaultError("UnExpected", -100);
       }
     }
   }
+
+  static ServerError handleServerError(int code, String message) {
+    return ServerError(message, code);
+  }
 }
+
+class UnauthorizedRequest extends NetworkExceptions { }
+class NotFound extends NetworkExceptions { }
+class RequestTimeout extends NetworkExceptions { }
+class InternalServerError extends NetworkExceptions { }
+class ServiceUnavailable extends NetworkExceptions { }
+class DefaultError extends NetworkExceptions { DefaultError(message, code); }
+class Conflict extends NetworkExceptions { }
+class NoInternetConnection extends NetworkExceptions { }
+class FormatException extends NetworkExceptions { }
+class ServerError extends NetworkExceptions { ServerError(message, code); }

@@ -3,31 +3,28 @@ import 'package:bloc_architecture/core/network_exceptions.dart';
 import 'package:bloc_architecture/di/injection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 
-@singleton
-class DioHelper {
-  final String tag = "APIService";
 
-  //TODO 使用dart扩展
-  Task<Either<NetworkExceptions, dynamic>> get(
-    String path, {
-    Map<String, dynamic> queryParameters,
-    Options options,
-    CancelToken cancelToken,
-    ProgressCallback onReceiveProgress,
-  })  {
+extension DioExtension<T extends Either<NetworkExceptions, dynamic>> on Dio {
+
+  Task<T> getX(
+      String path, {
+        Map<String, dynamic> queryParameters,
+        Options options,
+        CancelToken cancelToken,
+        ProgressCallback onReceiveProgress,
+      })  {
     return Task(() => dio.get(path,
-            queryParameters: queryParameters,
-            options: options,
-            cancelToken: cancelToken,
-            onReceiveProgress: onReceiveProgress))
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress))
         .attempt()
         .mapFailureAndServerError();
 
   }
 
-  Task<Either<NetworkExceptions, dynamic>> post(
+  Task<T> postX(
       String path, {
         Map<String, dynamic> queryParameters,
         Options options,
@@ -58,7 +55,9 @@ extension TaskX<T extends Either<Object, U>, U> on Task<T> {
     return this.map((a) {
       logger.d("Task", "isLeft= ${a.isLeft()}");
       if (a.isLeft()) {
-        return left(NetworkExceptions.formatException());
+        return a.leftMap((error) {
+          return NetworkExceptions.getDioException(error);
+        });
       } else {
         var result;
         a.fold(
@@ -77,7 +76,7 @@ extension TaskX<T extends Either<Object, U>, U> on Task<T> {
               result = right<NetworkExceptions, dynamic>((data as Response).data);
             } else {
               result = left<NetworkExceptions, dynamic>(
-                  NetworkExceptions.formatException());
+                  NetworkExceptions.handleServerError(response.code(), response.message()));
             }
           },
         );

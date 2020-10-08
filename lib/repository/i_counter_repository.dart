@@ -4,5 +4,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class ICounterRepository {
   Future<Either<NetworkExceptions, GirlPhotoListModel>> getGirlPhotos(int page,
-      {int count = 10});
+      int count);
 }

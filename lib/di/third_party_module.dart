@@ -1,3 +1,4 @@
+import 'package:bloc_architecture/api/api_service.dart';
 import 'package:bloc_architecture/util/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
@@ -37,4 +38,7 @@ abstract class ThirdPartyModule {
         connectTimeout: 5000, //5s
         receiveTimeout: 3000, //3s
       ));
+
+  @lazySingleton
+  APIService get apiService => APIService();
 }
