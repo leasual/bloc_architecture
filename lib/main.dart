@@ -1,6 +1,6 @@
 import 'package:bloc_architecture/di/injection.dart';
-import 'package:bloc_architecture/ui/counter/counter_bloc.dart';
-import 'package:bloc_architecture/ui/counter/counter_page.dart';
+import 'package:bloc_architecture/ui/counter/girl_bloc.dart';
+import 'package:bloc_architecture/ui/counter/girl_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -17,12 +17,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-          create: (context) => getIt<CounterBloc>(), child: CounterPage()),
+          create: (context) => getIt<GirlBloc>(), child: GirlPage()),
     );
   }
 }

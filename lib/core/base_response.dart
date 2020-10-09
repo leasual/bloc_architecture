@@ -6,11 +6,20 @@ part 'base_response.g.dart';
 @JsonSerializable(genericArgumentFactories: true)
 class BaseResponse<T> extends IBaseResponse{
   final int status;
+  @JsonKey(name: 'total_counts')
+  final int totalCounts;
+  @JsonKey(name: 'page_count')
+  final int pageCount;
+  @JsonKey(name: 'page')
+  final int currentPage;
   T data;
 
   BaseResponse(
       this.status,
       this.data,
+      this.totalCounts,
+      this.pageCount,
+      this.currentPage,
       );
 
   factory BaseResponse.fromJson(Map<String, dynamic> srcJson, fromJson)

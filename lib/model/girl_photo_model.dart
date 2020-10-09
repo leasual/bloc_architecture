@@ -5,14 +5,21 @@ part 'girl_photo_model.g.dart';
 @JsonSerializable()
 class GirlPhotoListModel extends Object {
 
-  // @JsonKey(name: 'data')
   final List<GirlPhotoModel> girlPhotoList;
 
 
   GirlPhotoListModel(this.girlPhotoList);
+  //
+  // factory GirlPhotoListModel.fromJson(Map<String, dynamic> json) =>
+  // _$GirlPhotoListModelFromJson(json);
 
-  factory GirlPhotoListModel.fromJson(Map<String, dynamic> json) =>
-  _$GirlPhotoListModelFromJson(json);
+  factory GirlPhotoListModel.fromJson(List<dynamic> parsedJson) {
+
+    List<GirlPhotoModel> photos = new List<GirlPhotoModel>();
+    photos = parsedJson.map((i)=>GirlPhotoModel.fromJson(i)).toList();
+
+    return GirlPhotoListModel(photos);
+  }
 
 
   Map<String, dynamic> toJson() => _$GirlPhotoListModelToJson(this);

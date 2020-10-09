@@ -204,6 +204,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.10"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.2.5"
+  eva_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: eva_icons_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -258,6 +272,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.2"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: eee016faa2d2b82b8021cb374e6dfdba0f63db6d
+      url: "https://github.com/BertrandBev/flutter_staggered_grid_view.git"
+    source: git
+    version: "0.3.0"
   flutter_stetho:
     dependency: "direct main"
     description:
@@ -409,7 +432,7 @@ packages:
     source: hosted
     version: "0.12.8"
   meta:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: meta
       url: "https://pub.flutter-io.cn"
