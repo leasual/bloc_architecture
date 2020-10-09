@@ -8,7 +8,7 @@ import 'package:bloc_architecture/core/dio_extension.dart';
 class APIService {
   //get girl photos
   Task<Either<NetworkExceptions, dynamic>> getGirlPhotos(int page,
-      {int count = 10}) {
+      int count) {
     return dio.getX("Girl/type/Girl/page/$page/count/$count");
   }
 }

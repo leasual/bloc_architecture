@@ -11,7 +11,7 @@ class DevCounterRepository implements ICounterRepository {
   @override
   Future<Result<dynamic>> getGirlPhotos(int page,
       int count) async {
-    return apiService.getGirlPhotos(page)
+    return apiService.getGirlPhotos(page, count)
         .map((a) => a.fold((l) {
       return Result.failure(l);
     }, (r) {

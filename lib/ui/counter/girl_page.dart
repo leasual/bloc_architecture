@@ -17,7 +17,6 @@ class GirlPage extends StatefulWidget {
 }
 
 class _GirlPageState extends State<GirlPage> {
-
   final String tag = "CounterPage";
 
   ScrollController _scrollController;
@@ -30,11 +29,12 @@ class _GirlPageState extends State<GirlPage> {
     _scrollController = ScrollController();
     BlocProvider.of<GirlBloc>(context).add(GirlLoadingEvent(_currentPage));
     _scrollController.addListener(() {
-      if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         logger.d(tag, "currentPage= $_currentPage totalPage= $totalPage");
-        if(_currentPage++ < totalPage) {
-          BlocProvider.of<GirlBloc>(context).add(
-              GirlLoadingEvent(_currentPage));
+        if (_currentPage++ < totalPage) {
+          BlocProvider.of<GirlBloc>(context)
+              .add(GirlLoadingEvent(_currentPage));
         }
       }
     });
@@ -59,9 +59,19 @@ class _GirlPageState extends State<GirlPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           _currentPage = 1;
-          BlocProvider.of<GirlBloc>(context).add(GirlLoadingEvent(_currentPage));
+          BlocProvider.of<GirlBloc>(context)
+              .add(GirlLoadingEvent(_currentPage));
         },
-        child: BlocBuilder<GirlBloc, Result>(
+        child: BlocConsumer<GirlBloc, Result>(
+            listener: (context, state) {
+              state.when(loading: () {
+
+              }, success: (model, totalPage, currentPage) {
+
+              }, failure: (error) {
+
+              });
+            },
             builder: (context, state) {
               state.when(loading: () {
                 nextView = Center(
@@ -69,73 +79,114 @@ class _GirlPageState extends State<GirlPage> {
                 );
               }, success: (model, totalPage, currentPage) {
                 var data = (model as List<GirlPhotoModel>);
-                this.totalPage =  totalPage;
-                nextView = StaggeredGridView.countBuilder(
-                    controller: _scrollController,
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    itemCount: data.length,
-                    itemBuilder: (context, index) => Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(color: Colors.grey[200], offset: Offset(3, 3), spreadRadius: 10, blurRadius: 10)
-                          ]
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                            child: AspectRatio(
-                              aspectRatio: index.isEven ? 0.95 : 0.85,
-                              child: CachedNetworkImage(
-                                imageUrl: data[index].url,
-                                errorWidget: (context, url, error) => Icon(Icons.error),
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16, bottom: 8, left: 16),
-                            child: Text("${data[index].title}", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Column(
-                                  children: [
-                                    SvgPicture.asset("assets/images/heart-outline.svg"),
-                                    Text("${data[index].likeCounts}", style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold),)
-                                  ],
-                                ),
-                                SizedBox(width: 10,),
-                                Column(
-                                  children: [
-                                    SvgPicture.asset("assets/images/eye-outline.svg"),
-                                    Text("${data[index].views}", style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold),)
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    staggeredTileBuilder: (index) => StaggeredTile.count(2, index.isEven? 3.1 : 3.3));
+                this.totalPage = totalPage;
+                nextView = buildListView(data);
               }, failure: (error) {
-                nextView = Container(color: Colors.red,);
-              }
-              );
+                nextView = Container(
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        BlocProvider.of<GirlBloc>(context)
+                            .add(GirlLoadingEvent(_currentPage));
+                      },
+                      child: Text('请求失败，请重试', style: TextStyle(fontSize: 14,
+                      color: Colors.black),),
+                    ),
+                  ),
+                );
+              });
               return nextView;
-            }
-        ),
+            }),
       ),
     );
+  }
+
+  Widget buildListView(List<GirlPhotoModel> data) {
+    return StaggeredGridView.countBuilder(
+        controller: _scrollController,
+        crossAxisCount: 4,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        itemCount: data.length,
+        itemBuilder: (context, index) => Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey[200],
+                        offset: Offset(3, 3),
+                        spreadRadius: 10,
+                        blurRadius: 10)
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    child: AspectRatio(
+                      aspectRatio: index.isEven ? 0.95 : 0.85,
+                      child: CachedNetworkImage(
+                        imageUrl: data[index].url,
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 16, bottom: 8, left: 16),
+                    child: Text(
+                      "${data[index].title}",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          children: [
+                            SvgPicture.asset("assets/images/heart-outline.svg"),
+                            Text(
+                              "${data[index].likeCounts}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          children: [
+                            SvgPicture.asset("assets/images/eye-outline.svg"),
+                            Text(
+                              "${data[index].views}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+        staggeredTileBuilder: (index) =>
+            StaggeredTile.count(2, index.isEven ? 3.1 : 3.3));
   }
 }

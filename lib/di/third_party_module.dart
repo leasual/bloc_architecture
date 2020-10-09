@@ -35,8 +35,8 @@ abstract class ThirdPartyModule {
   @lazySingleton
   Dio dio(@Named('BaseUrl') String url) => Dio(BaseOptions(
         baseUrl: url,
-        connectTimeout: 5000, //5s
-        receiveTimeout: 3000, //3s
+        connectTimeout: 10000, //10s
+        receiveTimeout: 10000, //10s
       ));
 
   @lazySingleton
