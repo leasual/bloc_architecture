@@ -1,29 +1,29 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'girl_photo_model.g.dart';
+part 'gank_model.g.dart';
 
 @JsonSerializable()
-class GirlPhotoListModel extends Object {
-  final List<GirlPhotoModel> girlPhotoList;
+class GankListModel extends Object {
+  final List<GankModel> gankModelList;
 
-  GirlPhotoListModel(this.girlPhotoList);
+  GankListModel(this.gankModelList);
 
   //
-  // factory GirlPhotoListModel.fromJson(Map<String, dynamic> json) =>
-  // _$GirlPhotoListModelFromJson(json);
+  // factory GankListModel.fromJson(Map<String, dynamic> json) =>
+  // _$GankListModelFromJson(json);
 
-  factory GirlPhotoListModel.fromJson(List<dynamic> parsedJson) {
-    List<GirlPhotoModel> photos = new List<GirlPhotoModel>();
-    photos = parsedJson.map((i) => GirlPhotoModel.fromJson(i)).toList();
+  factory GankListModel.fromJson(List<dynamic> parsedJson) {
+    List<GankModel> photos = new List<GankModel>();
+    photos = parsedJson.map((i) => GankModel.fromJson(i)).toList();
 
-    return GirlPhotoListModel(photos);
+    return GankListModel(photos);
   }
 
-  Map<String, dynamic> toJson() => _$GirlPhotoListModelToJson(this);
+  Map<String, dynamic> toJson() => _$GankListModelToJson(this);
 }
 
 @JsonSerializable()
-class GirlPhotoModel extends Object {
+class GankModel extends Object {
   // {
   // "_id": "5e959250808d6d2fe6b56eda",
   // "author": "鸢媛",
@@ -46,7 +46,7 @@ class GirlPhotoModel extends Object {
   String id;
   String author;
   String category;
-  String createAt;
+  String createdAt;
   String desc;
   List<String> images;
   int likeCounts;
@@ -57,11 +57,11 @@ class GirlPhotoModel extends Object {
   String url;
   int views;
 
-  GirlPhotoModel(
+  GankModel(
       this.id,
       this.author,
       this.category,
-      this.createAt,
+      this.createdAt,
       this.desc,
       this.images,
       this.likeCounts,
@@ -72,8 +72,8 @@ class GirlPhotoModel extends Object {
       this.url,
       this.views);
 
-  factory GirlPhotoModel.fromJson(Map<String, dynamic> json) =>
-      _$GirlPhotoModelFromJson(json);
+  factory GankModel.fromJson(Map<String, dynamic> json) =>
+      _$GankModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GirlPhotoModelToJson(this);
+  Map<String, dynamic> toJson() => _$GankModelToJson(this);
 }

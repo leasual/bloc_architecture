@@ -1,10 +1,13 @@
 import 'package:bloc_architecture/di/injection.dart';
-import 'package:bloc_architecture/ui/counter/girl_bloc.dart';
-import 'package:bloc_architecture/ui/counter/girl_page.dart';
+import 'package:bloc_architecture/ui/girl/girl_bloc.dart';
+import 'package:bloc_architecture/ui/girl/girl_page.dart';
+import 'package:bloc_architecture/ui/tab_bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+
+import 'ui/home/home_page_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +30,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BlocProvider(
-          create: (context) => getIt<GirlBloc>(), child: GirlPage()),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => getIt<GirlBloc>()),
+          BlocProvider(create: (context) => getIt<HomePageBloc>()),
+        ],
+        child: TabBarPage(),
+      ),
     );
   }
 }

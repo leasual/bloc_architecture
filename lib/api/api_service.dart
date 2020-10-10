@@ -10,4 +10,8 @@ class APIService {
   Task<Either<NetworkExceptions, dynamic>> getGirlPhotos(int page, int count) {
     return dio.getX("Girl/type/Girl/page/$page/count/$count");
   }
+
+  Task<Either<NetworkExceptions, dynamic>> getGoods(int page, int count) {
+    return dio.getX("GanHuo/type/All/page/$page/count/$count");
+  }
 }

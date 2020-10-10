@@ -1,32 +1,31 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'girl_photo_model.dart';
+part of 'gank_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GirlPhotoListModel _$GirlPhotoListModelFromJson(Map<String, dynamic> json) {
-  return GirlPhotoListModel(
-    (json['girlPhotoList'] as List)
-        ?.map((e) => e == null
-            ? null
-            : GirlPhotoModel.fromJson(e as Map<String, dynamic>))
+GankListModel _$GankListModelFromJson(Map<String, dynamic> json) {
+  return GankListModel(
+    (json['gankModelList'] as List)
+        ?.map((e) =>
+            e == null ? null : GankModel.fromJson(e as Map<String, dynamic>))
         ?.toList(),
   );
 }
 
-Map<String, dynamic> _$GirlPhotoListModelToJson(GirlPhotoListModel instance) =>
+Map<String, dynamic> _$GankListModelToJson(GankListModel instance) =>
     <String, dynamic>{
-      'girlPhotoList': instance.girlPhotoList,
+      'gankModelList': instance.gankModelList,
     };
 
-GirlPhotoModel _$GirlPhotoModelFromJson(Map<String, dynamic> json) {
-  return GirlPhotoModel(
+GankModel _$GankModelFromJson(Map<String, dynamic> json) {
+  return GankModel(
     json['_id'] as String,
     json['author'] as String,
     json['category'] as String,
-    json['createAt'] as String,
+    json['createdAt'] as String,
     json['desc'] as String,
     (json['images'] as List)?.map((e) => e as String)?.toList(),
     json['likeCounts'] as int,
@@ -39,12 +38,11 @@ GirlPhotoModel _$GirlPhotoModelFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$GirlPhotoModelToJson(GirlPhotoModel instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$GankModelToJson(GankModel instance) => <String, dynamic>{
       '_id': instance.id,
       'author': instance.author,
       'category': instance.category,
-      'createAt': instance.createAt,
+      'createdAt': instance.createdAt,
       'desc': instance.desc,
       'images': instance.images,
       'likeCounts': instance.likeCounts,

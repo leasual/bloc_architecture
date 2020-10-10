@@ -10,9 +10,10 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api_service.dart';
-import '../repository/dev_counter_repository.dart';
-import '../ui/counter/girl_bloc.dart';
-import '../repository/i_counter_repository.dart';
+import '../repository/dev_gank_repository.dart';
+import '../ui/girl/girl_bloc.dart';
+import '../ui/home/home_page_bloc.dart';
+import '../repository/i_gank_repository.dart';
 import '../util/logger.dart';
 import 'third_party_module.dart';
 
@@ -32,8 +33,7 @@ Future<GetIt> $initGetIt(
   final gh = GetItHelper(get, environment, environmentFilter);
   final thirdPartyModule = _$ThirdPartyModule();
   gh.lazySingleton<APIService>(() => thirdPartyModule.apiService);
-  gh.factory<ICounterRepository>(() => DevCounterRepository(),
-      registerFor: {_dev});
+  gh.factory<IGankRepository>(() => DevGankRepository(), registerFor: {_dev});
   gh.lazySingleton<Logger>(() => thirdPartyModule.logger);
   gh.factory<String>(() => thirdPartyModule.devBaseUrl,
       instanceName: 'BaseUrl', registerFor: {_dev});
@@ -43,7 +43,8 @@ Future<GetIt> $initGetIt(
       instanceName: 'BaseUrl', registerFor: {_test});
   gh.lazySingleton<Dio>(
       () => thirdPartyModule.dio(get<String>(instanceName: 'BaseUrl')));
-  gh.factory<GirlBloc>(() => GirlBloc(get<ICounterRepository>()));
+  gh.factory<GirlBloc>(() => GirlBloc(get<IGankRepository>()));
+  gh.factory<HomePageBloc>(() => HomePageBloc(get<IGankRepository>()));
 
   // Eager singletons must be registered in the right order
   final sharedPreferences = await thirdPartyModule.prefs;
