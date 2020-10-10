@@ -4,30 +4,26 @@ part 'girl_photo_model.g.dart';
 
 @JsonSerializable()
 class GirlPhotoListModel extends Object {
-
   final List<GirlPhotoModel> girlPhotoList;
 
-
   GirlPhotoListModel(this.girlPhotoList);
+
   //
   // factory GirlPhotoListModel.fromJson(Map<String, dynamic> json) =>
   // _$GirlPhotoListModelFromJson(json);
 
   factory GirlPhotoListModel.fromJson(List<dynamic> parsedJson) {
-
     List<GirlPhotoModel> photos = new List<GirlPhotoModel>();
-    photos = parsedJson.map((i)=>GirlPhotoModel.fromJson(i)).toList();
+    photos = parsedJson.map((i) => GirlPhotoModel.fromJson(i)).toList();
 
     return GirlPhotoListModel(photos);
   }
-
 
   Map<String, dynamic> toJson() => _$GirlPhotoListModelToJson(this);
 }
 
 @JsonSerializable()
 class GirlPhotoModel extends Object {
-
   // {
   // "_id": "5e959250808d6d2fe6b56eda",
   // "author": "鸢媛",
@@ -76,7 +72,8 @@ class GirlPhotoModel extends Object {
       this.url,
       this.views);
 
-  factory GirlPhotoModel.fromJson(Map<String, dynamic> json) => _$GirlPhotoModelFromJson(json);
+  factory GirlPhotoModel.fromJson(Map<String, dynamic> json) =>
+      _$GirlPhotoModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$GirlPhotoModelToJson(this);
 }

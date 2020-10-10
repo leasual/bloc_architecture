@@ -4,46 +4,41 @@ import 'package:bloc_architecture/di/injection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
-
 extension DioExtension<T extends Either<NetworkExceptions, dynamic>> on Dio {
-
   Task<T> getX(
-      String path, {
-        Map<String, dynamic> queryParameters,
-        Options options,
-        CancelToken cancelToken,
-        ProgressCallback onReceiveProgress,
-      })  {
+    String path, {
+    Map<String, dynamic> queryParameters,
+    Options options,
+    CancelToken cancelToken,
+    ProgressCallback onReceiveProgress,
+  }) {
     return Task(() => dio.get(path,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress))
+            queryParameters: queryParameters,
+            options: options,
+            cancelToken: cancelToken,
+            onReceiveProgress: onReceiveProgress))
         .attempt()
         .mapFailureAndServerError();
-
   }
 
   Task<T> postX(
-      String path, {
-        Map<String, dynamic> queryParameters,
-        Options options,
-        CancelToken cancelToken,
-        ProgressCallback onReceiveProgress,
-      })  {
+    String path, {
+    Map<String, dynamic> queryParameters,
+    Options options,
+    CancelToken cancelToken,
+    ProgressCallback onReceiveProgress,
+  }) {
     return Task(() => dio.post(path,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress))
+            queryParameters: queryParameters,
+            options: options,
+            cancelToken: cancelToken,
+            onReceiveProgress: onReceiveProgress))
         .attempt()
         .mapFailureAndServerError();
-
   }
 }
 
 extension TaskX<T extends Either<Object, U>, U> on Task<T> {
-
   Task<Either<NetworkExceptions, U>> mapLeftToFailure() {
     return this.map((a) => a.leftMap((error) {
           logger.e("Task", "error= $error isLeft= ${a.isLeft()}");
@@ -73,10 +68,12 @@ extension TaskX<T extends Either<Object, U>, U> on Task<T> {
                 BaseResponse.fromJson((data as Response).data, (j) => null);
             logger.d("Task", "code= ${response.status}");
             if (response.isSuccess()) {
-              result = right<NetworkExceptions, dynamic>((data as Response).data);
+              result =
+                  right<NetworkExceptions, dynamic>((data as Response).data);
             } else {
               result = left<NetworkExceptions, dynamic>(
-                  NetworkExceptions.handleServerError(response.code(), response.message()));
+                  NetworkExceptions.handleServerError(
+                      response.code(), response.message()));
             }
           },
         );

@@ -7,18 +7,18 @@ import 'package:injectable/injectable.dart';
 
 @Injectable(as: ICounterRepository, env: [Environment.dev])
 class DevCounterRepository implements ICounterRepository {
-
   @override
-  Future<Result<dynamic>> getGirlPhotos(int page,
-      int count) async {
-    return apiService.getGirlPhotos(page, count)
+  Future<Result<dynamic>> getGirlPhotos(int page, int count) async {
+    return apiService
+        .getGirlPhotos(page, count)
         .map((a) => a.fold((l) {
-      return Result.failure(l);
-    }, (r) {
-      final data = BaseResponse<GirlPhotoListModel>.fromJson(
-          r, (j) => GirlPhotoListModel.fromJson(r['data']));
-      return Result.success(data.data, data.pageCount, data.currentPage);
-    }))
+              return Result.failure(l);
+            }, (r) {
+              final data = BaseResponse<GirlPhotoListModel>.fromJson(
+                  r, (j) => GirlPhotoListModel.fromJson(r['data']));
+              return Result.success(
+                  data.data, data.pageCount, data.currentPage);
+            }))
         .run();
   }
 }

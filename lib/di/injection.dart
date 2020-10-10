@@ -1,7 +1,6 @@
 import 'package:bloc_architecture/api/api_service.dart';
 import 'package:bloc_architecture/util/logger.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_stetho/flutter_stetho.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +24,6 @@ final dio = getIt<Dio>();
 
 final apiService = getIt<APIService>();
 
-
 @InjectableInit(
   initializerName: r'$initGetIt', // default
   preferRelativeImports: true, // default
@@ -41,7 +39,7 @@ Future<void> initApp(String environment) async {
   //init router
 
   // init network request debug
-  if(Environment.dev == environment) {
+  if (Environment.dev == environment) {
     // Stetho.initialize();
     // enable log output to console
     logger.isDebug = true;

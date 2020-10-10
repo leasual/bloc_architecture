@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -6,7 +7,6 @@ part 'network_exceptions.freezed.dart';
 
 @freezed
 abstract class NetworkExceptions with _$NetworkExceptions {
-
   const factory NetworkExceptions.requestCancelled() = _RequestCancelled;
 
   const factory NetworkExceptions.unauthorizedRequest() = _UnauthorizedRequest;
@@ -31,7 +31,8 @@ abstract class NetworkExceptions with _$NetworkExceptions {
 
   const factory NetworkExceptions.serviceUnavailable() = _ServiceUnavailable;
 
-  const factory NetworkExceptions.noInternetConnection() = _NoInternetConnection;
+  const factory NetworkExceptions.noInternetConnection() =
+      _NoInternetConnection;
 
   const factory NetworkExceptions.formatException() = _FormatException;
 
@@ -41,7 +42,8 @@ abstract class NetworkExceptions with _$NetworkExceptions {
 
   const factory NetworkExceptions.unexpectedError() = _UnexpectedError;
 
-  const factory NetworkExceptions.serverError(String message, int code) = _ServerError;
+  const factory NetworkExceptions.serverError(String message, int code) =
+      _ServerError;
 
   static NetworkExceptions handleResponse(int statusCode) {
     switch (statusCode) {
@@ -70,6 +72,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
         return NetworkExceptions.defaultError("default error $responseCode");
     }
   }
+
   static NetworkExceptions getDioException(error) {
     if (error is Exception) {
       try {
@@ -86,20 +89,23 @@ abstract class NetworkExceptions with _$NetworkExceptions {
               networkExceptions = NetworkExceptions.noInternetConnection();
               break;
             case DioErrorType.RECEIVE_TIMEOUT:
-              networkExceptions = NetworkExceptions.defaultError("ReceiveTimeout -100");
+              networkExceptions =
+                  NetworkExceptions.defaultError("ReceiveTimeout -100");
               break;
             case DioErrorType.RESPONSE:
               networkExceptions =
                   NetworkExceptions.handleResponse(error.response.statusCode);
               break;
             case DioErrorType.SEND_TIMEOUT:
-              networkExceptions = NetworkExceptions.defaultError("SendTimeout -100");
+              networkExceptions =
+                  NetworkExceptions.defaultError("SendTimeout -100");
               break;
           }
         } else if (error is SocketException) {
           networkExceptions = NetworkExceptions.noInternetConnection();
         } else {
-          networkExceptions = NetworkExceptions.defaultError("UnExpected - 100");
+          networkExceptions =
+              NetworkExceptions.defaultError("UnExpected - 100");
         }
         return networkExceptions;
       } on FormatException catch (e) {

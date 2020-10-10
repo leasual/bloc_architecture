@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'base_response.g.dart';
 
 @JsonSerializable(genericArgumentFactories: true)
-class BaseResponse<T> extends IBaseResponse{
+class BaseResponse<T> extends IBaseResponse {
   final int status;
   @JsonKey(name: 'total_counts')
   final int totalCounts;
@@ -15,15 +15,15 @@ class BaseResponse<T> extends IBaseResponse{
   T data;
 
   BaseResponse(
-      this.status,
-      this.data,
-      this.totalCounts,
-      this.pageCount,
-      this.currentPage,
-      );
+    this.status,
+    this.data,
+    this.totalCounts,
+    this.pageCount,
+    this.currentPage,
+  );
 
-  factory BaseResponse.fromJson(Map<String, dynamic> srcJson, fromJson)
-    => _$BaseResponseFromJson<T>(srcJson, fromJson);
+  factory BaseResponse.fromJson(Map<String, dynamic> srcJson, fromJson) =>
+      _$BaseResponseFromJson<T>(srcJson, fromJson);
 
   Map<String, dynamic> toJson(toJson) => _$BaseResponseToJson(this, toJson);
 
@@ -40,6 +40,4 @@ class BaseResponse<T> extends IBaseResponse{
 
   @override
   String message() => "";
-
-
 }
