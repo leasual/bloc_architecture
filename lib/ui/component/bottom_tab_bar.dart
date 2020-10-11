@@ -50,7 +50,10 @@ class _BottomTabBarState extends State<BottomTabBar> with SingleTickerProviderSt
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Colors.white,
-          border: Border.all(color: Colors.grey[300], width: 0.5, style: BorderStyle.solid)
+          boxShadow: [
+            BoxShadow(color: Colors.grey[300], offset: Offset(3, -3), blurRadius: 1, spreadRadius: 0)
+          ]
+          // border: Border.all(color: Colors.grey[300], width: 0.5, style: BorderStyle.solid)
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

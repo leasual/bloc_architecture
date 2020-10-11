@@ -11,7 +11,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'home_page_event.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -28,17 +27,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    BlocProvider.of<HomePageBloc>(context).add(HomePageLoadingGoodsEvent(_currentPage));
+    BlocProvider.of<HomePageBloc>(context)
+        .add(HomePageLoadingGoodsEvent(_currentPage));
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         logger.d(tag, "currentPage= $_currentPage totalPage= $totalPage");
 
-        if(_currentPage < totalPage) {
+        if (_currentPage < totalPage) {
           BlocProvider.of<HomePageBloc>(context)
               .add(HomePageLoadingGoodsEvent(_currentPage));
         }
-
       }
     });
   }
@@ -65,16 +64,19 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             highlightElevation: 0,
             onPressed: () {
-
+              filterMenuKey.currentState.toggleFilterMenu();
             },
             child: SvgPicture.asset("assets/images/funnel-outline.svg"),
           )
         ],
-        title: Text(
-          "干货",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+        title: Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "干货",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
@@ -88,55 +90,65 @@ class _HomePageState extends State<HomePage> {
               BlocProvider.of<HomePageBloc>(context)
                   .add(HomePageLoadingGoodsEvent(_currentPage));
             },
-            child: BlocConsumer<HomePageBloc, Result>(
-                listener: (context, state) {
-                  state.when(
-                      loading: () {},
-                      success: (model, totalPage, currentPage) {},
-                      failure: (error) {
-                        logger.d(tag, "network error= $error");
-                        Scaffold.of(context).showSnackBar(SnackBar(backgroundColor: Colors.green,
-                          content: Text("网络请求失败，请稍后重试"),));
-                      });
-                },
-                builder: (context, state) {
-                  state.when(loading: () {
-                    nextView = Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }, success: (model, totalPage, currentPage) {
-                    var data = (model as List<GankModel>);
-                    this.totalPage = totalPage;
-                    if(_currentPage < totalPage) {
-                      _currentPage++;
-                    }
-                    dataList.clear();
-                    dataList.addAll(data);
-                    nextView = buildListView(data);
-                  }, failure: (error) {
-                    if(dataList.length > 0) {
-                      nextView = buildListView(dataList);
-                    } else {
-                      nextView = Container(
-                        child: Center(
-                          child: InkWell(
-                            onTap: () {
-                              BlocProvider.of<HomePageBloc>(context)
-                                  .add(HomePageLoadingGoodsEvent(_currentPage));
-                            },
-                            child: Text(
-                              '请求失败，请重试',
-                              style: TextStyle(fontSize: 14, color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
+            child:
+                BlocConsumer<HomePageBloc, Result>(listener: (context, state) {
+              state.when(
+                  loading: () {},
+                  success: (model, totalPage, currentPage) {},
+                  failure: (error) {
+                    logger.d(tag, "network error= $error");
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text("网络请求失败，请稍后重试"),
+                    ));
                   });
-                  return nextView;
-                }),
+            }, builder: (context, state) {
+              state.when(loading: () {
+                nextView = Center(
+                  child: CircularProgressIndicator(),
+                );
+              }, success: (model, totalPage, currentPage) {
+                var data = (model as List<GankModel>);
+                this.totalPage = totalPage;
+                if (_currentPage < totalPage) {
+                  _currentPage++;
+                }
+                dataList.clear();
+                dataList.addAll(data);
+                nextView = buildListView(data);
+              }, failure: (error) {
+                if (dataList.length > 0) {
+                  nextView = buildListView(dataList);
+                } else {
+                  nextView = Container(
+                    child: Center(
+                      child: InkWell(
+                        onTap: () {
+                          BlocProvider.of<HomePageBloc>(context)
+                              .add(HomePageLoadingGoodsEvent(_currentPage));
+                        },
+                        child: Text(
+                          '请求失败，请重试',
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              });
+              return nextView;
+            }),
           ),
-          FilterMenu(),
+          FilterMenu(
+            menuList: [
+              "Android",
+              "iOS",
+              "Flutter",
+              "frontend",
+              "app",
+            ],
+            key: filterMenuKey,
+          ),
         ],
       ),
     );
@@ -163,28 +175,50 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text(data[index].title, style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),),
+              child: Text(
+                data[index].title,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text(data[index].desc, style: TextStyle(color: Colors.black, fontSize: 14),),
+              child: Text(
+                data[index].desc,
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text("作者：${data[index].author}", style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+              child: Text(
+                "作者：${data[index].author}",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(data[index].createdAt.split(" ")[0], style: TextStyle(color: Colors.grey[600], fontSize: 14),),
+              child: Text(
+                data[index].createdAt.split(" ")[0],
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 20, top: 10),
-              child: CommentWidget(model: data[index],),
+              child: CommentWidget(
+                model: data[index],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Divider(height: 1, color: Colors.grey[300],),
+              child: Divider(
+                height: 1,
+                color: Colors.grey[300],
+              ),
             ),
           ],
         ),

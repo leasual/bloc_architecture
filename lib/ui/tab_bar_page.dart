@@ -31,20 +31,22 @@ class _TabBarPageState extends State<TabBarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: _pages[_currentPage],
-      bottomNavigationBar: BottomTabBar(
-        barItems: [
-          BottomBarItem(title: "Home", image: "assets/images/home-outline.svg"),
-          BottomBarItem(title: "Photo", image: "assets/images/grid-outline.svg"),
-          BottomBarItem(title: "Settings", image: "assets/images/settings-outline.svg"),
-        ],
-        onTabChanged: (index) {
-          logger.d(tag, "select item index= $index");
-          setState(() {
-            _currentPage = index;
-          });
-        },
+      bottomNavigationBar: SafeArea(
+        child: BottomTabBar(
+          barItems: [
+            BottomBarItem(title: "Home", image: "assets/images/home-outline.svg"),
+            BottomBarItem(title: "Photo", image: "assets/images/grid-outline.svg"),
+            BottomBarItem(title: "Settings", image: "assets/images/settings-outline.svg"),
+          ],
+          onTabChanged: (index) {
+            logger.d(tag, "select item index= $index");
+            setState(() {
+              _currentPage = index;
+            });
+          },
+        ),
       ),
     );
   }

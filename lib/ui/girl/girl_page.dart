@@ -56,11 +56,14 @@ class _GirlPageState extends State<GirlPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 80,
-        title: Text(
-          "每日一图",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+        title: Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "每日一图",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

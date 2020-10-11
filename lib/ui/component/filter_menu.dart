@@ -1,4 +1,7 @@
+import 'package:bloc_architecture/di/injection.dart';
 import 'package:flutter/material.dart';
+
+GlobalKey<_FilterMenuState> filterMenuKey = GlobalKey();
 
 class FilterMenu extends StatefulWidget {
 
@@ -15,17 +18,27 @@ class FilterMenu extends StatefulWidget {
 
 class _FilterMenuState extends State<FilterMenu> with SingleTickerProviderStateMixin {
 
+  final String tag = "FilterMenu";
+
   AnimationController _animationController;
   Animation _animation;
+  bool isOpen = false;
+
+  void toggleFilterMenu() {
+    logger.d(tag, "toggleFilterMenu");
+    if(_animationController.isAnimating) return;
+    isOpen = !isOpen;
+    isOpen ? _animationController.forward() : _animationController.reverse();
+  }
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: 300),
     );
-    final curve = CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
+    final curve = CurvedAnimation(parent: _animationController, curve: Curves.fastOutSlowIn);
     _animation =  Tween(begin: 0.0, end: 1.0).animate(curve)
       ..addListener(() {
         setState(() {});
@@ -42,7 +55,7 @@ class _FilterMenuState extends State<FilterMenu> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Positioned(
-      right: 0,//-(size.width * 0.3) * (1 - _animation.value),
+      right: -(size.width * 0.3) * (1 - _animation.value),
       child: Container(
         width: size.width * 0.3,
         height: size.height * 0.6,
@@ -57,7 +70,7 @@ class _FilterMenuState extends State<FilterMenu> with SingleTickerProviderStateM
             ]
         ),
         child: ListView.builder(
-            itemCount: 10,
+            itemCount: this.widget.menuList.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) => buildMenuItem(this.widget.menuList[index]),
             padding: EdgeInsets.symmetric(vertical: 20),
@@ -68,11 +81,13 @@ class _FilterMenuState extends State<FilterMenu> with SingleTickerProviderStateM
 
   Widget buildMenuItem(String title) {
     return Container(
-      child: Column(
-        children: [
-          Text("")
-        ],
-      ),
+      height: 60,
+      child: MaterialButton(
+        onPressed: () {
+          toggleFilterMenu();
+        },
+        child: Text(title, style: TextStyle(fontSize: 14, color: Colors.black),),
+      )
     );
   }
 }
